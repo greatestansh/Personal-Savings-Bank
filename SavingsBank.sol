@@ -23,6 +23,7 @@ contract SavingsBank {
 
     function withdraw(uint _amount) public onlyOwner {
         require(_amount <= address(this).balance, "Insufficient contract balance");
-        payable(owner).transfer(_amount);
+        (bool success, ) = payable(owner).call{value: _amount}("");
+        require(success, "ETH transfer failed");
     }
 }
